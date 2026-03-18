@@ -1,0 +1,21 @@
+Pasos para crear un CRUD rapidamente
+https://youtu.be/bEcafN5m7Yk?list=PL_pubEzO4GxMrDE5mTPRNx6VpcvSHp5xB
+Se instala un paquete para hacer cruds (lo veremos luego)
+
+creamos la tabla en la bd
+php artisan make:migration create_inventory_items_table
+    (se guarda en database\migrations\2026_03_18_214125_create_inventory_items_table.php)
+
+Vamos al archivo y ponemos la estrucura que queremos (siguiendo el ejemplo)
+            $table->string('name');
+            $table->text('description')->nullable();
+            $table->integer('quantity');
+            $table->decimal('price', 8,2);
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+
+php artisan migrate (ver donde está configurada la bd, en el trabajo tenia apuntando a donweb y en casa a la bd local de postgresl)
+
+podemos ir haciendo commits en cada paso para ir practicando y poder movernos hacia algún punto específico
+
+git add .
+git commint -m "Agregando archivo paso a paso y tabla de inventario"
