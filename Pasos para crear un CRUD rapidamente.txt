@@ -18,4 +18,15 @@ php artisan migrate (ver donde está configurada la bd, en el trabajo tenia apun
 podemos ir haciendo commits en cada paso para ir practicando y poder movernos hacia algún punto específico
 
 git add .
-git commint -m "Agregando archivo paso a paso y tabla de inventario"
+git commit -m "Agregando archivo paso a paso y tabla de inventario"
+
+Ahora vamos a instalar Breeze (Genera la autenticación de usuarios, no es necesario https://youtu.be/bEcafN5m7Yk?list=PL_pubEzO4GxMrDE5mTPRNx6VpcvSHp5xB&t=276)
+composer require laravel/breeze --dev            -> me pide que installe boots (no lo hice)
+
+Luego "instalamos" la autenticación
+php artisan breeze:install blade (lo hacemos con blade para q use tailwindcss)
+
+El archivo views/auth/layouts/app.blade.php es el que facilita generar los cruds y permite utilizar los x-layout. Si no instalamos breeze hay que generar a mano el archivo
+
+git add .
+git commit -m "Se instaló Breeze"
