@@ -30,3 +30,88 @@ El archivo views/auth/layouts/app.blade.php es el que facilita generar los cruds
 
 git add .
 git commit -m "Se instaló Breeze"
+
+Ahora instalamos el paquete encargado de generar los paquetes cruds
+composer require ibex/crud-generator --dev
+
+    Vuelve a pedir que instale boots, le pregunte a la IA
+"cuando instalo algo en laravel a traves de composer me sale el mensaje php artisan boost update ansi Please set up Boost with php artisan boost install first Script php artisan boost update ansi handling the post update cmd event returned with error code 1"
+    Respuesta:
+Este mensaje de error indica que tienes instalado Laravel Boost (una herramienta oficial para mejorar el desarrollo con IA), pero el proceso de instalación no se completó correctamente, lo que provoca que los scripts automáticos de Composer fallen al intentar ejecutarse.Para solucionar este error y permitir que tus instalaciones con Composer funcionen normalmente, sigue estos pasos:1. Completar la instalación de BoostEl mensaje solicita explícitamente que ejecutes el instalador. Abre tu terminal en la carpeta raíz del proyecto y ejecuta:
+php artisan boost:install
+Este comando configurará los recursos necesarios (guías de IA y "skills") y generará los archivos de configuración requeridos (como .mcp.json o boost.json).
+
+Ahora lo instalamos para continuar de 20
+
+Primera pregunta instalando
+Let's give Laravel a Boost
+
+  Which Boost features would you like to configure? [guidelines,skills,mcp]
+  AI Guidelines ......................................................................................................................... guidelines  
+  Agent Skills .............................................................................................................................. skills  
+  Boost MCP Server Configuration ............................................................................................................... mcp
+❯ 
+
+
+
+Para una configuración completa que te permita aprovechar al máximo la integración con IA (especialmente si usas herramientas como Cursor, Windsurf o Claude Code), lo ideal es seleccionar las tres opciones.Aquí te explico brevemente qué hace cada una para que decidas:AI Guidelines (guidelines): Genera archivos de reglas (como .cursorrules o .clauderules) que le enseñan a la IA las convenciones específicas de tu proyecto Laravel (estilo de código, estructura de carpetas, etc.).Agent Skills (skills): Crea una carpeta de "habilidades" que permite a los agentes de IA ejecutar tareas complejas dentro de tu app, como crear modelos o controladores siguiendo tus propios estándares.Boost MCP Server (mcp): Configura el Model Context Protocol, que permite que herramientas externas de IA "entiendan" el contexto profundo de tu código en tiempo real.¿Cómo proceder?Si quieres todo (Recomendado): Escribe guidelines,skills,mcp (separados por coma) y presiona Enter.Si solo buscas lo básico: Selecciona guidelines para que la IA sepa cómo escribir código en tu proyecto.Una vez que termines este asistente, el error de Composer desaparecerá porque los archivos necesarios ya estarán creados.
+
+Solo di Enter para que tome la opción predefinida (los tres)
+
+ Which third-party AI guidelines/skills would you like to install? [None]
+  None .............................................................................................................................................  
+  laravel/pint (guideline) ............................................................................................................ laravel/pint
+
+Esta opción te pregunta si quieres que Laravel Boost le enseñe a tu IA cómo usar herramientas externas que ya tienes (o podrías tener) en tu proyecto.¿Qué elegir?Si usas Laravel Pint: Selecciona laravel/pint. Esto generará una regla para que la IA (como Cursor o Claude) formatee el código automáticamente siguiendo tus estándares de estilo cada vez que escriba una nueva clase o método.Si no lo usas o no estás seguro: Simplemente presiona Enter (para dejar la opción por defecto [None]).Mi recomendación:Si tu proyecto es estándar, selecciona laravel/pint. Es la herramienta oficial de Laravel para que el código se vea limpio y uniforme, y es genial que la IA sepa que debe respetarlo.
+
+Elegí laravel/pint para ver como funciona
+
+Would you like to install Herd MCP alongside Boost MCP? (yes/no) [no]
+
+Esta pregunta aparece porque Laravel Boost puede integrarse con Laravel Herd, el entorno de desarrollo local ultra rápido para macOS (y recientemente Windows).¿Qué elegir?Selecciona yes si: Ya usas Laravel Herd como tu servidor local (PHP, Nginx, bases de datos). Esto permitirá que el servidor MCP de Boost se comunique mejor con los servicios que gestiona Herd, dándole a tu IA más contexto sobre tu entorno de ejecución.Selecciona no (o presiona Enter) si: Usas Docker (Laravel Sail), Artisan Serve directamente, o un servidor manual. No necesitas la integración con Herd si no lo tienes instalado.Dato clave: Si no estás seguro, elige no. Puedes activarlo más tarde si decides empezar a usar Herd.
+
+Elegí No en casa x q no me funcionó la instalación de HERD
+
+ Which AI agents would you like to configure?
+  Claude Code .......................................................................................................................... claude_code
+  Codex ...................................................................................................................................... codex
+  Cursor .................................................................................................................................... cursor
+  Gemini CLI ................................................................................................................................ gemini
+  GitHub Copilot ........................................................................................................................... copilot
+  Junie ...................................................................................................................................... junie
+  OpenCode ................................................................................................................................ opencode
+
+  Elegí copilot
+
+
+                                                                             Enjoy the boost 🚀 Next steps: https://boost.laravel.com/installed/
+
+
+Correr npm install para ver si falta algún requerimiento
+
+ahora npm run dev  (en realidad corrí composer run dev)
+
+ingresé a http://localhost:8000 y me registré: Domins:pepepepe
+
+---------------------------------------------------------------------------------------------
+
+Listo todo instalado para generar CRUDS
+php artisan make:crud inventory_items tailwind
+
+TARDÓ MENOS DE 5 SEGUNDOS!!!!!!!!!!!!!!!!!!!!!!
+
+Crea las vistas en la propia carpeta de la entidad (resources\views\inventory-item)
+Modelo en app\Models\InventoryItem.php
+Request en app\Http\Requests\InventoryItemRequest.php
+Controlador en app\Http\Controllers\InventoryItemController.php
+
+Lo que hacemos es agregar la ruta en web.php
+
+Importamos el controlador
+use App\Http\Controllers\InventoryItemController;
+
+Agregamos la Ruta en el grupo de middleware
+Route::resource('inventory-items', InventoryItemController::class);
+
+Si vamos a la ruta http://localhost:8000/inventory-items
+vemos que no aparece bien el botón (el estilo css). Ejecutamos npm run build (y listo! en el video... a mi no me funcionó)
