@@ -115,3 +115,9 @@ Route::resource('inventory-items', InventoryItemController::class);
 
 Si vamos a la ruta http://localhost:8000/inventory-items
 vemos que no aparece bien el botón (el estilo css). Ejecutamos npm run build (y listo! en el video... a mi no me funcionó)
+
+1. Limpia la caché de LaravelA veces Laravel sigue sirviendo una versión antigua de las vistas o la configuración:
+bash
+php artisan view:clear
+php artisan cache:clear
+php artisan config:clear
