@@ -9,18 +9,30 @@ use App\Http\Requests\InventoryItemRequest;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
 
+
 class InventoryItemController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request): View
+    public function index(Request $request)
     {
-        $inventoryItems = InventoryItem::paginate();
+        $search = $request->input('search');
 
-        return view('inventory-item.index', compact('inventoryItems'))
-            ->with('i', ($request->input('page', 1) - 1) * $inventoryItems->perPage());
+        $inventoryItems = InventoryItem::query()
+            ->when($search, function ($query, $search) {
+                return $query->whereRaw(
+                    "to_tsvector('spanish', unaccent(concat (name , ' ', description))) @@ to_tsquery('spanish', regexp_replace(cast(? as text), '\s+', ':* | ', 'g') || ':*')",
+                    [$search]
+                );
+            })
+            ->paginate()
+            ->appends(['search' => $search]);
+
+        return view('inventory-item.index', compact('inventoryItems', 'search'))
+            ->with('i', ($request->input('page', 1) - 1) * $inventoryItems->perPage());;
     }
+
 
     /**
      * Show the form for creating a new resource.

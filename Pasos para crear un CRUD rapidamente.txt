@@ -121,3 +121,13 @@ bash
 php artisan view:clear
 php artisan cache:clear
 php artisan config:clear
+
+    Para poder cambiar la paginación a castellano
+php artisan vendor:publish --tag=laravel-pagination
+    Editar el archivo
+resources\views\vendor\pagination\tailwind.blade.php
+
+
+crear extensiones para búsqueda en postgresql
+CREATE EXTENSION IF NOT EXISTS pg_trgm;
+CREATE EXTENSION IF NOT EXISTS unaccent;
