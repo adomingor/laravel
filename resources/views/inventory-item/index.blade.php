@@ -30,7 +30,7 @@
 
 
                     <div class="flex justify-center w-full px-2 py-6">
-                    <form action="{{ route('inventory-items.index') }}" method="GET" style="width: 40%;">
+                        <form action="{{ route('inventory-items.index') }}" method="GET" class="w-1/2">
                         <div class="relative flex items-center flex-grow bg-white border border-gray-300 rounded-lg focus-within:ring-2 focus-within:ring-blue-500 focus-within:border-blue-500 transition shadow-sm overflow-hidden">
                             
                             <div class="pl-3 flex items-center pointer-events-none">
@@ -75,7 +75,7 @@
 									<th scope="col" class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Description</th>
 									<th scope="col" class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Quantity</th>
 									<th scope="col" class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Price</th>
-									<th scope="col" class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">User Id</th>
+									<th scope="col" class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">User</th>
 
                                         <th scope="col" class="px-3 py-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500"></th>
                                     </tr>
@@ -89,7 +89,7 @@
 										<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $inventoryItem->description }}</td>
 										<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $inventoryItem->quantity }}</td>
 										<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $inventoryItem->price }}</td>
-										<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $inventoryItem->user_id }}</td>
+										<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $inventoryItem->user->name }}</td>
 
                                             <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900">
                                                 <form action="{{ route('inventory-items.destroy', $inventoryItem->id) }}" method="POST">

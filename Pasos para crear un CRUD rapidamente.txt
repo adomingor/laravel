@@ -131,3 +131,20 @@ resources\views\vendor\pagination\tailwind.blade.php
 crear extensiones para búsqueda en postgresql
 CREATE EXTENSION IF NOT EXISTS pg_trgm;
 CREATE EXTENSION IF NOT EXISTS unaccent;
+
+    Personalizar como se generan los CURDS (hay que publicar el crud)
+
+Por. ej. personalizar el index
+
+php artisan vendor:publish --tag=crud
+
+Esto nos trae config\crud.php
+
+Tambien se publica los stubs que es como se generan los cruds
+php artisan vendor:publish --tag=stubs-crud
+
+Esto trar varios archivo que estan en resources\stubs\crud
+
+Como estamos trabajando con tailwind los archivos estan en resources\stubs\crud\views\tailwind
+
+
