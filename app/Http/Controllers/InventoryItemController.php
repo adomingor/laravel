@@ -22,10 +22,11 @@ class InventoryItemController extends Controller
         $inventoryItems = InventoryItem::query()
             ->when($search, function ($query, $search) {
                 return $query->whereRaw(
-                    "to_tsvector('spanish', unaccent(concat (name , ' ', description))) @@ to_tsquery('spanish', regexp_replace(cast(? as text), '\s+', ':* | ', 'g') || ':*')",
+                    "to_tsvector('spanish', unaccent(concat (name , ' ', description))) @@ to_tsquery('spanish', regexp_replace(unaccent(cast(? as text)), '\s+', ':* | ', 'g') || ':*')",
                     [$search]
                 );
             })
+            ->orderBy('created_at', 'desc')
             ->paginate()
             ->appends(['search' => $search]);
 

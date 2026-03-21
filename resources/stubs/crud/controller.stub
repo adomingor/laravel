@@ -16,10 +16,31 @@ class {{modelName}}Controller extends Controller
      */
     public function index(Request $request): View
     {
+        $search = $request->input('search');
+
+        ${{modelNamePluralLowerCase}} = {{modelName}}::query()
+            ->when($search, function ($query, $search) {
+                return $query->whereRaw(
+                    "to_tsvector('spanish', unaccent(search_idx) @@ to_tsquery('spanish', regexp_replace(unaccent(cast(? as text)), '\s+', ':* | ', 'g') || ':*')",
+                    [$search]
+                );
+            })
+            ->orderBy('created_at', 'desc')
+            ->paginate()
+            ->appends(['search' => $search]);
+
+// esta línea reemplaza al de la búsqueda si no tengo una columna de tipo ts_vector llamada search_idx para la búsqueda fts
+// "to_tsvector('spanish', unaccent(concat (columna1 , ' ', colmunaXXX))) @@ to_tsquery('spanish', regexp_replace(unaccent(cast(? as text)), '\s+', ':* | ', 'g') || ':*')",
+
+        return view('{{modelView}}.index', compact('{{modelNamePluralLowerCase}}', 'search'))
+            ->with('i', ($request->input('page', 1) - 1) * ${{modelNamePluralLowerCase}}->perPage());;
+
+        //  Listado por defecto sin form de búsqueda en la vista
+/*        
         ${{modelNamePluralLowerCase}} = {{modelName}}::paginate();
 
         return view('{{modelView}}.index', compact('{{modelNamePluralLowerCase}}'))
-            ->with('i', ($request->input('page', 1) - 1) * ${{modelNamePluralLowerCase}}->perPage());
+            ->with('i', ($request->input('page', 1) - 1) * ${{modelNamePluralLowerCase}}->perPage()); */
     }
 
     /**

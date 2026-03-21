@@ -147,4 +147,19 @@ Esto trar varios archivo que estan en resources\stubs\crud
 
 Como estamos trabajando con tailwind los archivos estan en resources\stubs\crud\views\tailwind
 
+Vamos a personalizar el controlador
+resources\stubs\crud\controller.stub
 
+Tambien hay que personalizar la vista resources\stubs\crud\views\tailwind\index.stub para que tengo el input de búsqueda (no lo hago para avanzar, despues decidimos con que stub trabajar)
+Si hay inconvenientes con la creación de siguiente crud, se puede probar limpiando la cache y optimizando (php artisan optimize:clear)
+
+Si hay un error generando, se corrige y se elimina los archivos que fue generando hasta que dió error. Eliminar:
+app->Http->Conntrollers->archivoController.php
+resources\views\carpeta_archivo
+app\Http\Requests\ArchivoRequest.php
+
+Generando un nuevo cruds (de ejemplo usando la tabla users que ya fue creada con breeze)
+
+php artisan make:crud users tailwind
+
+cambie el nombre de la bd a DB_DATABASE=learnlaravelbreeze
