@@ -2,39 +2,87 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
+use App\Models\Producto;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use App\Http\Requests\ProductoRequest;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\View\View;
+use App\Models\ProductoCategoriaView;
 
 class ProductoController extends Controller
 {
-    public function index() {
-        return view("listado_productos");
+    /**
+     * Display a listing of the resource.
+     */
+    public function index(Request $request): View
+    {
+        $productos = ProductoCategoriaView::all();
+        return view('producto.index', compact('productos'));
+
+        // $productos = ProductoCategoriaView::paginate();
+
+        // return view('producto.index', compact('productos'))
+        //      ->with('i', ($request->input('page', 1) - 1) * $productos->perPage());
     }
 
-    public function create() {
-        return "Creacion de un nuevo producto";
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function create(): View
+    {
+        $producto = new Producto();
+
+        return view('producto.create', compact('producto'));
     }
 
-    public function store(Request $request) {
-        return "Producto guardado correctamente";
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(ProductoRequest $request): RedirectResponse
+    {
+        Producto::create($request->validated());
+
+        return Redirect::route('productos.index')
+            ->with('success', 'Producto created successfully.');
     }
 
-    public function show($id) {
-        // return view("show", ["id" => $id]); // forma 1 de pasar parametros a la vista (si aquí se pone "codigo" en vez de "id", en la vista se debe usar $codigo para acceder al valor)
-        // return view("show")->with("id", $id); // forma 2 de pasar parametros a la vista
-        $nombre = "Nombre del Producto $id";
-        return view("show", compact("id", "nombre")); // forma 3 de pasar parametros a la vista
+    /**
+     * Display the specified resource.
+     */
+    public function show($id): View
+    {
+        $producto = Producto::find($id);
+
+        return view('producto.show', compact('producto'));
     }
 
-    public function edit($id) {
-        return "Editando producto";
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit($id): View
+    {
+        $producto = Producto::find($id);
+
+        return view('producto.edit', compact('producto'));
     }
 
-    public function update(Request $request, $id) {
-        return "Producto actualizado correctamente";
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(ProductoRequest $request, Producto $producto): RedirectResponse
+    {
+        $producto->update($request->validated());
+
+        return Redirect::route('productos.index')
+            ->with('success', 'Producto updated successfully');
     }
 
-    public function destroy($id) {
-        return "Producto eliminado correctamente";
+    public function destroy($id): RedirectResponse
+    {
+        Producto::find($id)->delete();
+
+        return Redirect::route('productos.index')
+            ->with('success', 'Producto deleted successfully');
     }
 }

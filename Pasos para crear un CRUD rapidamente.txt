@@ -163,3 +163,127 @@ Generando un nuevo cruds (de ejemplo usando la tabla users que ya fue creada con
 php artisan make:crud users tailwind
 
 cambie el nombre de la bd a DB_DATABASE=learnlaravelbreeze
+
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+CONTINUAMOS CON EL CRUDS (composer require ibex/crud-generator --dev) HUBO CONFUSIÓN CON LA AUTENTICACIÓN (breeze) 
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Creamos 3 tablas y una vista, pedi a chatGPT que genere el modelo para producto y que utilice la vista en el controlador (todavia no generado por la confusión confusa con breeze)
+
+Dió estas opciones
+🧠 Opción 1 (rápida): usar Query Builder
+
+No necesitás modelo, simplemente cambiás el index():
+
+use Illuminate\Support\Facades\DB;
+
+public function index()
+{
+    $productos = DB::table('vw_productos_categorias')->get();
+
+    return view('productos.index', compact('productos'));
+}
+
+---------------------------
+
+🧠 Opción 2 (recomendada): crear un modelo para la vista
+
+Esto es más limpio y mantenible (sobre todo para proyectos grandes).
+
+📦 1. Crear modelo
+php artisan make:model ProductoCategoriaView
+
+📄 2. Modelo app/Models/ProductoCategoriaView.php
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+/**
+ * Modelo para la vista vw_productos_categorias
+ */
+class ProductoCategoriaView extends Model
+{
+    protected $table = 'vw_productos_categorias';
+
+    protected $primaryKey = 'id';
+
+    public $timestamps = false;
+
+    // Es una vista → no se puede escribir
+    public $incrementing = false;
+
+    protected $guarded = [];
+}
+
+📄 3. Usarlo en el controlador
+use App\Models\ProductoCategoriaView;
+
+public function index()
+{
+    $productos = ProductoCategoriaView::all();
+
+    return view('productos.index', compact('productos'));
+}
+
+
+🔥 Bonus PRO (paginación + búsqueda)
+public function index(Request $request)
+{
+    $query = ProductoCategoriaView::query();
+
+    if ($request->filled('search')) {
+        $query->where('producto', 'ilike', '%' . $request->search . '%');
+    }
+
+    $productos = $query->paginate(10);
+
+    return view('productos.index', compact('productos'));
+}
+
+⚠️ Importante
+❌ No uses este modelo para:
+insert
+update
+delete
+
+👉 Porque es una VIEW, no una tabla
+
+🧩 Cómo mostrar categorías en Blade
+
+Como ya hiciste:
+
+{{ $producto->categorias }}
+
+o con HTML:
+
+{!! $producto->categorias_br !!}
+🧠 Resumen claro
+✔ Usás la vista como si fuera una tabla
+✔ Podés usar DB::table() o un modelo
+✔ Mejor práctica → modelo ProductoCategoriaView
+✔ Ideal para listados (index)
+
+-------------- creamos el crud
+php artisan make:crud productos tailwind      
+Running Crud Generator ...
+
+ Already exist Controller. Do you want overwrite (y/n)? [y]:   (EL CONTROLADOR QUE EXISTE ES PRODUCTO NO PRODUCTOS, PERO PARECE Q LO PONE EN SINGULAR)
+ > 
+
+Creating Controller ...
+
+ Already exist Model. Do you want overwrite (y/n)? [y]:
+ > 
+
+Creating Model ...
+
+Si a todo
+
+Luego siguiendo la 2da opción de la IA
+
+php artisan make:model ProductoCategoriaView
+
+Editamos el archivo resources\views\layouts\navigation.blade.php para incluir los links al inventario de items y a productos

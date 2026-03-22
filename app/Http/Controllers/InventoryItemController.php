@@ -19,16 +19,16 @@ class InventoryItemController extends Controller
     {
         $search = $request->input('search');
 
-        $inventoryItems = InventoryItem::query()
-            ->when($search, function ($query, $search) {
-                return $query->whereRaw(
-                    "to_tsvector('spanish', unaccent(concat (name , ' ', description))) @@ to_tsquery('spanish', regexp_replace(unaccent(cast(? as text)), '\s+', ':* | ', 'g') || ':*')",
-                    [$search]
-                );
-            })
-            ->orderBy('created_at', 'desc')
-            ->paginate()
-            ->appends(['search' => $search]);
+    $query = InventoryItem::query();
+    if ($search) {
+        // Usamos la función personalizada en el FROM
+        // Pasamos NULL::inventory_items para que la función sepa qué columnas devolver
+        $query->fromRaw("busca_fts(NULL::inventory_items, ?)", [$search]);
+    }
+     $inventoryItems = $query
+        ->orderBy('created_at', 'desc')
+        ->paginate()
+        ->appends(['search' => $search]);
 
         return view('inventory-item.index', compact('inventoryItems', 'search'))
             ->with('i', ($request->input('page', 1) - 1) * $inventoryItems->perPage());;

@@ -16,6 +16,15 @@
                         {{ __('Dashboard') }}
                     </x-nav-link>
                 </div>
+
+                <x-nav-link :href="route('inventory-items.index')" :active="request()->routeIs('inventory-items.*')">
+                    {{ __('Inventario') }}
+                </x-nav-link>
+
+                <x-nav-link :href="route('productos.index')" :active="request()->routeIs('productos.*')">
+                    {{ __('Productos') }}
+                </x-nav-link>
+
             </div>
 
             <!-- Settings Dropdown -->
