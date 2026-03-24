@@ -26,7 +26,7 @@
                     </div>
                     <div class="flow-root">
                         <div class="mt-8 overflow-x-auto">
-                            <div class="max-w-xl py-2 align-middle px-1">
+                            <div class="w-9/12 py-2 align-middle px-1">
                                 <form method="POST" action="{{ route('productos.store') }}"  role="form" enctype="multipart/form-data">
                                     @csrf
 

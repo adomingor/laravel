@@ -13,27 +13,6 @@ use App\Models\Categoria;
 
 class ProductoController extends Controller
 {
-
-    private function obtenerTexto($request)
-    {
-        return $request->producto ?: 'El registro';
-    }
-    /**
-     * Display a listing of the resource.
-     */
-    // public function index(Request $request): View
-    // {
-    //     // $productos = ProductoCategoriaView::all();
-    //     // return view('producto.index', compact('productos'));
-
-    //     $productos = ProductoCategoriaView::paginate();
-    //     // dd($productos->perPage()); // Esto te confirmará exactamente qué número está usando Laravel
-
-    //     return view('producto.index', compact('productos'))
-    //          ->with('i', ($request->input('page', 1) - 1) * $productos->perPage());
-    // }
-
-
     public function index(Request $request)
     {
         $search = $request->input('search');
@@ -45,12 +24,16 @@ class ProductoController extends Controller
 
         // 2. Consulta con unaccent para ignorar tildes
         // AGREGAMOS with('usuario') aquí
-        $productos = ProductoCategoriaView::with('usuario') 
+        $productos = ProductoCategoriaView::with('usuario')
+            ->where('producto_activo', true) // Filtro base: Solo los que están activos
             ->when($search, function ($query, $search) {
                 $term = '%' . $search . '%';
-                return $query->whereRaw("unaccent(producto) ILIKE unaccent(?)", [$term])
-                            ->orWhereRaw("unaccent(descripcion) ILIKE unaccent(?)", [$term])
-                            ->orWhereRaw("unaccent(categorias) ILIKE unaccent(?)", [$term]);
+                // Agrupamos el buscador para que el OR no rompa el filtro 'activo'
+                return $query->where(function($q) use ($term) {
+                    $q->whereRaw("unaccent(producto) ILIKE unaccent(?)", [$term])
+                    ->orWhereRaw("unaccent(descripcion) ILIKE unaccent(?)", [$term])
+                    ->orWhereRaw("unaccent(categorias) ILIKE unaccent(?)", [$term]);
+                });
             })
             ->orderBy('producto', 'desc')
             ->paginate($perPage)
@@ -91,15 +74,12 @@ class ProductoController extends Controller
                     'activo'   => true,         // Valor por defecto
                 ];
             }
+            // Sincronizamos con los valores para la tabla intermedia
+            $producto->categorias()->sync($categoriasConDatosExtra);
         }
 
-        // Sincronizamos con los valores para la tabla intermedia
-        $producto->categorias()->sync($categoriasConDatosExtra);
-
-        $texto = $this->obtenerTexto($request);
-
         return Redirect::route('productos.index')
-            ->with('success', __('DadoAlta', ['_txt' => $texto]));
+            ->with('success', __('DadoAlta', ['_txt' => $producto->producto]));
     }
 
     /**
@@ -133,25 +113,42 @@ class ProductoController extends Controller
     {
         $producto->update($request->validated());
 
-        $texto = $this->obtenerTexto($request);
         return Redirect::route('productos.index')
-            ->with('success', __('Grabado', ['_txt' => $texto]))
+            ->with('info', __('Actualizado', ['_txt' => $producto->producto]))
             ->with('toast_time', 6000);
     }
 
+    // Borrado físico de los registros //
+    // public function destroy($id)
+    // {
+    //     $producto = Producto::findOrFail($id);
+    //     $nombProd = $producto->producto;
+
+    //     // Elimina relaciones en la tabla pivote
+    //     $producto->categorias()->detach();
+
+    //     // Ahora sí elimina el producto
+    //     $producto->delete();
+
+    //     return redirect()->back()
+    //         ->with('eliminated', __('Borrado', ['_txt' => $nombProd]))
+    //         ->with('toast_time', 5000);
+    // }
+
+    // Borrado lógico //
     public function destroy($id)
     {
+        // 1. Buscas el producto para tener sus datos
         $producto = Producto::findOrFail($id);
 
-        // Elimina relaciones en la tabla pivote
-        $producto->categorias()->detach();
+        // 2. Actualizas el estado
+        $producto->update(['activo' => false]);
 
-        // Ahora sí elimina el producto
-        $producto->delete();
-
-        return redirect()->back()->with('eliminated', 'El producto fue eliminado correctamente');
+        return redirect()->back()
+            ->with('inactive', __('Desactivado', ['_txt' => $producto->producto]))
+            ->with('toast_time', 4000);
     }
-    // App\Models\Producto.php
+
     /**
      * Agregamos la funcion para que muestre las categorias
      */

@@ -264,7 +264,11 @@
     "Detail": "Detalle",
     "Add new": "Agregar",
     "Back": "Regresar",
-    "Grabado": ":_txt se guardó correctamente!",
     "DadoAlta": ":_txt se dió de alta!",
-    "Editing": "Editando los datos"
+    "Grabado": ":_txt se guardó!",
+    "Borrado": ":_txt se borró!",
+    "Desactivado": ":_txt fué desactivado!",
+    "Actualizado": ":_txt se actualizó!",
+    "Editing": "Editando los datos",
+    "Deactivate": "Deasctivar"
 }

@@ -23,7 +23,7 @@ use Illuminate\Database\Eloquent\Model;
 class InventoryItem extends Model
 {
     
-    protected $perPage = 5;
+    protected $perPage = 10;
 
     /**
      * The attributes that are mass assignable.

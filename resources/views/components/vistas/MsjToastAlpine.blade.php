@@ -8,7 +8,8 @@
             success: { border: 'border-green-500', barColor: 'bg-green-500', iconColor: 'text-green-600', icon: 'M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z', anim: 'animate-success-combo' },
             error: { border: 'border-red-600', barColor: 'bg-red-600', iconColor: 'text-red-600', icon: 'M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z', anim: 'animate-error-combo' },
             info: { border: 'border-blue-500', barColor: 'bg-blue-500', iconColor: 'text-blue-600', icon: 'M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12v-.008z', anim: 'animate-info-combo' },
-            deleted: { border: 'border-orange-700', barColor: 'bg-orange-700', iconColor: 'text-orange-700', icon: 'M6 7.5h12M9.75 7.5v9m4.5-9v9M4.5 7.5h15m-13.5 0l.75 12a2.25 2.25 0 002.244 2.1h6.012a2.25 2.25 0 002.244-2.1l.75-12M9 7.5V5.25A1.5 1.5 0 0110.5 3.75h3A1.5 1.5 0 0115 5.25V7.5', anim: 'animate-deleted-combo' }
+            deleted: { border: 'border-orange-700', barColor: 'bg-orange-700', iconColor: 'text-orange-700', icon: 'M6 7.5h12M9.75 7.5v9m4.5-9v9M4.5 7.5h15m-13.5 0l.75 12a2.25 2.25 0 002.244 2.1h6.012a2.25 2.25 0 002.244-2.1l.75-12M9 7.5V5.25A1.5 1.5 0 0110.5 3.75h3A1.5 1.5 0 0115 5.25V7.5', anim: 'animate-deleted-combo' },
+            inactive: { border: 'border-slate-400', barColor: 'bg-slate-400', iconColor: 'text-slate-500', icon: 'M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636', anim: 'animate-inactive-combo' }            
         };
             return types[this.type] || types.info;
         }
@@ -19,8 +20,11 @@
         @if(session('status')) message = '{{ session('status') }}'; type = 'info'; @endif
         @if(session('info')) message = '{{ session('info') }}'; type = 'info'; @endif
         @if(session('eliminated')) message = '{{ session('eliminated') }}'; type = 'deleted'; @endif
+        @if(session('inactive')) message = '{{ session('inactive') }}'; type = 'inactive'; @endif
         @if(session('toast_time')) duration = {{ session('toast_time') }}; @endif
         
+
+
         if(message) {
             show = true;
             setTimeout(() => show = false, duration); {{-- recibe el tiempo desde el controlador --}}
@@ -81,14 +85,13 @@
     .animate-custom-heartbeat { animation: custom-heartbeat 0.8s ease-in-out 2; }
     .animate-custom-flip { animation: custom-flip 0.6s ease-in-out 1; }
     .animate-custom-glow { animation: custom-glow 1s ease-in-out 2; }
-    /* SUCCESS: rebote + glow */
+    .animate-custom-glow-green { animation: custom-glow-green 1s ease-in-out 2; }
     .animate-success-combo { animation: custom-bounce 0.6s ease-in-out 2, custom-flip 1s ease-in-out 2; }
-    /* ERROR: shake fuerte */
     .animate-error-combo { animation: custom-shake 0.25s ease-in-out 6; }
-    /* INFO: pulse + aparición suave */
     .animate-info-combo { animation: custom-pulse 1s ease-in-out 2, custom-slide-up 0.4s ease-out 1; }
-    /* DELETED: shake + leve fade */
-    .animate-deleted-combo { animation: custom-rotate 0.2s ease-in-out 5, custom-wiggle 0.3s ease-in-out 2; }    
+    .animate-deleted-combo { animation: custom-rotate 0.2s ease-in-out 5, custom-wiggle 0.3s ease-in-out 2; }
+    .animate-inactive-combo { animation: custom-flicker-off 1.5s ease-in-out forwards; }
+
 
     @keyframes progress-drain {
         from { width: 100%; }
@@ -166,9 +169,19 @@
         }
     }
 
-    .animate-custom-glow-green {
-        animation: custom-glow-green 1s ease-in-out 2;
+    @keyframes inactive-combo {
+        0%, 100% { transform: translateY(0) rotate(0deg); }
+        25% { transform: translateY(-8px) rotate(-10deg); }
+        50% { transform: translateY(0) rotate(10deg); }
+        75% { transform: translateY(-4px) rotate(-5deg); }
     }
 
+    @keyframes custom-flicker-off {
+        0%, 100% { opacity: 1; filter: grayscale(0%); transform: scale(1); }
+        10%, 30%, 50% { opacity: 0.3; filter: grayscale(100%); transform: scale(0.95); }
+        20%, 40%, 60% { opacity: 1; filter: grayscale(0%); transform: scale(1); }
+        70% { opacity: 0.5; filter: grayscale(100%); transform: scale(0.9); }
+        100% { opacity: 0.6; filter: grayscale(100%); }
+    }
 
 </style>
