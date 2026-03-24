@@ -9,9 +9,15 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
 use App\Models\Producto;
 use App\Models\ProductoCategoriaView;
+use App\Models\Categoria;
 
 class ProductoController extends Controller
 {
+
+    private function obtenerTexto($request)
+    {
+        return $request->producto ?: 'El registro';
+    }
     /**
      * Display a listing of the resource.
      */
@@ -56,12 +62,15 @@ class ProductoController extends Controller
 
     /**
      * Show the form for creating a new resource.
+     * Modificamos para que se pueda elegir las categorias
      */
     public function create(): View
     {
         $producto = new Producto();
+        // return view('producto.create', compact('producto'));
+         $categorias = Categoria::where('activo', true)->get();
 
-        return view('producto.create', compact('producto'));
+        return view('producto.create', compact('producto', 'categorias'));
     }
 
     /**
@@ -69,10 +78,28 @@ class ProductoController extends Controller
      */
     public function store(ProductoRequest $request): RedirectResponse
     {
-        Producto::create($request->validated());
+        $producto = Producto::create($request->validated());
+
+        // 2. Guardamos la relación en la tabla muchos a muchos (prod_cat)
+        // sync recibe el array de IDs del Select2 o de los checkboxes y gestiona la tabla intermedia
+        if ($request->has('id_categorias')) {
+            // Preparamos los datos extra para cada categoría seleccionada
+            $categoriasConDatosExtra = [];
+            foreach ($request->id_categorias as $id) {
+                $categoriasConDatosExtra[$id] = [
+                    'id_users' => auth()->id(), // El ID del usuario actual
+                    'activo'   => true,         // Valor por defecto
+                ];
+            }
+        }
+
+        // Sincronizamos con los valores para la tabla intermedia
+        $producto->categorias()->sync($categoriasConDatosExtra);
+
+        $texto = $this->obtenerTexto($request);
 
         return Redirect::route('productos.index')
-            ->with('success', 'Producto created successfully.');
+            ->with('success', __('DadoAlta', ['_txt' => $texto]));
     }
 
     /**
@@ -88,11 +115,15 @@ class ProductoController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit($id): View
+    public function edit(Producto $producto): View
     {
-        $producto = Producto::find($id);
+        // 1. Cargamos todas las categorías activas para llenar el Select2
+        $categorias = Categoria::where('activo', true)->get();
 
-        return view('producto.edit', compact('producto'));
+        // 2. Cargamos la relación para que el formulario sepa cuáles marcar
+        $producto->load('categorias');
+
+        return view('producto.edit', compact('producto', 'categorias'));
     }
 
     /**
@@ -100,20 +131,35 @@ class ProductoController extends Controller
      */
     public function update(ProductoRequest $request, Producto $producto): RedirectResponse
     {
-        // Si no hay nombre de producto, enviamos "El registro" al mensaje 'success'
-        $texto = $request->producto ?: 'El registro';
-
         $producto->update($request->validated());
 
+        $texto = $this->obtenerTexto($request);
         return Redirect::route('productos.index')
-            ->with('info', __('Grabado', ['_txt' => $texto]));
+            ->with('success', __('Grabado', ['_txt' => $texto]))
+            ->with('toast_time', 6000);
     }
 
-    public function destroy($id): RedirectResponse
+    public function destroy($id)
     {
-        Producto::find($id)->delete();
+        $producto = Producto::findOrFail($id);
 
-        return Redirect::route('productos.index')
-            ->with('success', 'Producto deleted successfully');
+        // Elimina relaciones en la tabla pivote
+        $producto->categorias()->detach();
+
+        // Ahora sí elimina el producto
+        $producto->delete();
+
+        return redirect()->back()->with('eliminated', 'El producto fue eliminado correctamente');
     }
+    // App\Models\Producto.php
+    /**
+     * Agregamos la funcion para que muestre las categorias
+     */
+    public function categorias()
+    {
+        return $this->belongsToMany(Categoria::class, 'prod_cat', 'id_productos', 'id_categorias')
+                    ->withPivot('activo', 'id_users') // Campos extra de tu tabla intermedia
+                    ->withTimestamps('fecha_ins', 'fecha_upd');
+    }
+
 }

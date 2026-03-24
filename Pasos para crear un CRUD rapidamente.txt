@@ -397,3 +397,66 @@ Personalizado index y show
 Agregamos archivos Alpine para los mensajes toast en las vistas. Tambien se agrega un archivo de mensaje que se quita a los 5 segundos usando div y js
 resources\views\components\vistas\msjToast-session-success.blade.php
 resources\views\components\vistas\msjDiv-session-success.blade.php
+
+
+                ----------------------------------------------------------------
+                Creamos el crud para categorias (veremos si funcionan los stubs)
+                ----------------------------------------------------------------
+Pedir a la ia que genere el modelo (ya le pase las 3 tablas producto, cateroria y prod_cat)
+
+Agregamos al controlador del producto la funcion que faltaba y ajustamos el create, store, update, edit
+
+Dió 3 opciones para mostrar las categorias:
+    Un listado simple (no requiere cambios en el codigo del controlador)
+    Opciones con checkbox (hay que sincronizar en el store $producto->categorias()->sync($request->id_categorias);)
+    Opcion con select2, no pude hacer que funcione la importacion en el app.blade.php, para probar lo instale con el vite
+        1. Instala las librerías
+        Abre tu terminal en la carpeta del proyecto y ejecuta:
+        bash
+        npm install jquery select2
+        Usa el código con precaución.
+
+        2. Configura los recursos (resources/js/app.js)
+        Abre tu archivo resources/js/app.js y agrega estas líneas. Esto hará que jQuery sea global (para que Select2 lo encuentre) y cargará el plugin:
+        javascript
+        import './bootstrap';
+
+        import jQuery from 'jquery';
+        window.$ = window.jQuery = jQuery;
+
+        import select2 from 'select2';
+        select2(); // Inicializa el plugin en jQuery
+
+        // Importar el CSS de Select2 (opcional aquí o en app.css)
+        import 'select2/dist/css/select2.min.css';
+        Usa el código con precaución.
+
+        3. Compila los cambios
+        Para que Vite procese las nuevas librerías, debes tener corriendo el servidor de desarrollo:
+        bash
+        npm run dev
+        Usa el código con precaución.
+
+        4. Inicializa en tu Blade (form.blade.php)
+        Como Vite carga los scripts de forma asíncrona, debes esperar a que todo esté listo. Usa este script al final de tu formulario:
+        html
+        <script type="module">
+            // Con type="module", Vite asegura que jQuery ya esté disponible
+            $(document).ready(function() {
+                $('#id_categorias').select2({
+                    placeholder: "Seleccione categorías",
+                    allowClear: true,
+                    width: '100%'
+                });
+            });
+        </script>
+
+        <style>
+            /* Ajuste para que Select2 no se vea "aplastado" con Tailwind */
+            .select2-container .select2-selection--multiple {
+                border-color: #d1d5db !important;
+                min-height: 42px;
+            }
+        </style>
+
+AL FINAL UN DOLOR DE HUEVOS EL SELECT2, lo deje con los checkbox
