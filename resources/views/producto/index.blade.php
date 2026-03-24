@@ -105,10 +105,7 @@
         </div>
     </div>
 
-
-    @include('components.vistas.msjToast-session-success')
-
-
-
-
+    {{-- Es el @if(session('success') @endif --}}
+    {{-- @include('components.vistas.msjToast-session-success') --}}
+    @include('components.vistas.msjToastAlpine')
 </x-app-layout>

@@ -100,10 +100,13 @@ class ProductoController extends Controller
      */
     public function update(ProductoRequest $request, Producto $producto): RedirectResponse
     {
+        // Si no hay nombre de producto, enviamos "El registro" al mensaje 'success'
+        $texto = $request->producto ?: 'El registro';
+
         $producto->update($request->validated());
 
         return Redirect::route('productos.index')
-            ->with('success', __('Grabado', ['_txt' => 'El Producto']));
+            ->with('info', __('Grabado', ['_txt' => $texto]));
     }
 
     public function destroy($id): RedirectResponse
