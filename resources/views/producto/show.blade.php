@@ -12,16 +12,23 @@
                     <div class="sm:flex sm:items-center">
                         <div class="sm:flex-auto">
                             <h1 class="text-base font-semibold leading-6 text-gray-900">{{ __('Show') }} Producto</h1>
-                            <p class="mt-2 text-sm text-gray-700">Details of {{ __('Producto') }}.</p>
                         </div>
                         <div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
-                            <a type="button" href="{{ route('productos.index') }}" class="block rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Back</a>
+                            <a type="button" href="{{ route('productos.index') }}" class="inline-flex items-center rounded-md bg-slate-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-slate-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-600 transition-colors">
+                                <!-- Flecha Simple -->
+                                <svg class="w-5 h-5 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                                </svg>
+                                {{ __('Back') }}
+                            </a>
                         </div>
                     </div>
 
                     <div class="flow-root">
-                        <div class="mt-8 overflow-x-auto">
+                        <div class="mt-2 overflow-x-auto">
                             <div class="inline-block min-w-full py-2 align-middle">
+                                <p class="mt-2 text-base text-gray-700 underline decoration-indigo-500 decoration-1 decoration-wavy underline-offset-4 hover:decoration-2 hover:underline-offset-4 
+          transition-all duration-300 cursor-defaul w-16">{{ __('Detail') }}:</p>
                                 <div class="mt-6 border-t border-gray-100">
                                     <dl class="divide-y divide-gray-100">
                                         
@@ -38,8 +45,8 @@
                                     <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{{ $producto->activo }}</dd>
                                 </div>
                                 <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                                    <dt class="text-sm font-medium leading-6 text-gray-900">Id Users</dt>
-                                    <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{{ $producto->id_users }}</dd>
+                                    <dt class="text-sm font-medium leading-6 text-gray-900">{{ __('User') }}</dt>
+                                    <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{{ $producto->user->name }}</dd>
                                 </div>
                                 <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                                     <dt class="text-sm font-medium leading-6 text-gray-900">Fecha Ins</dt>

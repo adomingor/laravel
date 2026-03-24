@@ -287,3 +287,113 @@ Luego siguiendo la 2da opción de la IA
 php artisan make:model ProductoCategoriaView
 
 Editamos el archivo resources\views\layouts\navigation.blade.php para incluir los links al inventario de items y a productos
+
+Creamos 2 archivos para utilizarlos en la vista index.blade.php, la idea es que el usuario pueda elegir la cantidad de registros que quiere ver (están predefinidos), tomando como inicio el que está definido en el modelo, el otro archivo es para poner el formulario de búsqueda (filtro) del listado que se está mostrando y poner la condición en el controlador
+    resources\views\components\vistas\busqueda-filtro-index.blade.php
+    (resources\views\components\vistas\busqueda-filtro-fx-index.blade.php hace cambiar de color el botón cuando el usuario escribe)
+
+    resources\views\components\vistas\selector-per-page.blade.php
+
+Se utilizó un modelo para la vista de productos que se usa en el controlador, en la vista por defecto trae los campos de la tabla productos, la cambié por el de la vista y está tambien como obtener el nombre del usuario desde el modelo de la vista y llamarlo desde el view, en el commit anterior se subió como hacer la búsqueda fts con palabras parciales (comienzo y final de palabras)
+
+
+-------------- Traducción automática
+1. Crear el archivo de traducción (Recomendado)
+Si tu aplicación está en español, debes ir a resources/lang/es.json (o crear el archivo si no existe) y agregar la traducción:
+json
+{
+    "Delete": "Eliminar",
+    "Show": "Ver",
+    "Edit": "Editar",
+    "Add new": "Agregar nuevo"
+}
+
+2. Usar archivos PHP (Si prefieres carpetas)
+Si usas archivos por categorías, verifica en resources/lang/es/messages.php:
+php
+return [
+    'Delete' => 'Eliminar',
+];
+
+3. A partir de Laravel 10, y siguiendo en Laravel 12, las traducciones ya no vienen instaladas por defecto para ahorrar espacio. Sin embargo, existe un estándar de la comunidad que es el "complemento" oficial de facto para tener todos los archivos JSON y PHP en español al instante.
+La mejor forma de agregarlo es mediante el paquete Laravel Lang:
+    1. Instalación rápida (Vía Composer)
+Ejecuta este comando en tu terminal para descargar las traducciones de más de 100 idiomas (incluido el español):
+bash
+composer require laravel-lang/common --dev
+
+    2. Publicar el idioma español
+Una vez instalado, ejecuta el comando para que el paquete cree los archivos en tu carpeta lang/:
+bash
+php artisan lang:add es
+
+    3. Configurar Laravel en Español
+Para que Laravel use estos archivos por defecto (y dejes de ver errores de traducción), ve a tu archivo config/app.php y cambia la línea del locale:
+php
+'locale' => 'es',
+
+Si el error de VS Code persiste:
+Si después de hacer esto la extensión de VS Code sigue marcando el error en {{ __('Delete') }}, es porque tú debes agregar esa palabra específica a tu archivo lang/es.json, ya que Laravel Lang trae lo estándar del framework, pero no las palabras propias de tu lógica de negocio:
+json
+{
+    "Delete": "Eliminar",
+    "Show": "Ver",
+    "Edit": "Editar",
+    "Add new": "Agregar nuevo"
+}
+
+-------------- Traducción automática
+composer require laravel-lang/common --dev
+
+
+sugirió correr composer audit por que encontró una vulnerabilidad
+PS C:\laragon\www\primerProyecto> composer audit
+Found 1 security vulnerability advisory affecting 1 package:
++-------------------+----------------------------------------------------------------------------------+
+| Package           | league/commonmark                                                                |
+| Severity          | medium                                                                           |
+| Advisory ID       | PKSA-21fb-n1x5-5nf7                                                              |
+| CVE               | CVE-2026-33347                                                                   |
+| Title             | league/commonmark has an embed extension allowed_domains bypass                  |
+| URL               | https://github.com/advisories/GHSA-hh8v-hgvp-g3f5                                |
+| Affected versions | >=2.3.0,<=2.8.1                                                                  |
+| Reported at       | 2026-03-19T19:04:24+00:00                                                        |
++-------------------+----------------------------------------------------------------------------------+
+
+Luego ejecuté 
+php artisan lang:add es
+
+Editar el archivo .event y dejar así
+APP_LOCALE=es
+APP_FALLBACK_LOCALE=en
+APP_FAKER_LOCALE=en_AR
+
+LISTOOOO!!!
+-------------- Fin Traducción automática
+
+-------------- personalizando stubs
+    BOTON REGRESAR
+                        <div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
+                            <a type="button" href="{{ route('productos.index') }}" class="inline-flex items-center rounded-md bg-slate-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-slate-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-600 transition-colors">
+                                <!-- Flecha Simple -->
+                                <svg class="w-5 h-5 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                                </svg>
+                                <!-- Flecha con Círculo (Más visible) 
+                                <svg class="w-5 h-5 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 15l-3-3m0 0l3-3m-3 3h8M3 12a9 9 0 1118 0 9 9 0 01-18 0z"></path>
+                                </svg>-->
+
+                                <!-- Flecha Curva (Estilo "Undo/Retornar") 
+                                <svg class="w-5 h-5 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6"></path>
+                                </svg>-->
+                                {{ __('Back') }}
+                            </a>
+                        </div>
+
+Personalizado index y show
+
+Agregamos archivos Alpine para los mensajes toast en las vistas. Tambien se agrega un archivo de mensaje que se quita a los 5 segundos usando div y js
+resources\views\components\vistas\msjToast-session-success.blade.php
+resources\views\components\vistas\msjDiv-session-success.blade.php

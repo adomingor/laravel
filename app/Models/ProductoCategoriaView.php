@@ -20,5 +20,12 @@ class ProductoCategoriaView extends Model
 
     protected $guarded = [];
 
-    protected $perPage = 5; // agregado para la paginación
+    protected $perPage = 7; // agregado para la paginación
+
+
+    public function usuario() // Puedes llamarlo 'user' o 'usuario'
+    {
+        return $this->belongsTo(\App\Models\User::class, 'producto_id_users', 'id'); // Ponemos el nombre de la columna de la vista, nombre de la columna de la tabla users
+    }    
+
 }

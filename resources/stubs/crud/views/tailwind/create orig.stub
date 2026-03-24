@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Create') }} Producto
+            {{ __('Create') }} {{modelTitle}}
         </h2>
     </x-slot>
 
@@ -11,11 +11,11 @@
                 <div class="w-full">
                     <div class="sm:flex sm:items-center">
                         <div class="sm:flex-auto">
-                            <h1 class="text-base font-semibold leading-6 text-gray-900">{{ __('Create') }} Producto</h1>
-                            <p class="mt-2 text-sm text-gray-700">{{ __('Add') }} {{ __('Producto') }}.</p>
+                            <h1 class="text-base font-semibold leading-6 text-gray-900">{{ __('Create') }} {{modelTitle}}</h1>
+                            <p class="mt-2 text-sm text-gray-700">{{ __('Add') }} {{ __('{{modelTitle}}') }}.</p>
                         </div>
                         <div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
-                            <a type="button" href="{{ route('productos.index') }}" class="inline-flex items-center rounded-md bg-slate-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-slate-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-600 transition-colors">
+                            <a type="button" href="{{ route('{{modelRoute}}.index') }}" class="inline-flex items-center rounded-md bg-slate-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-slate-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-600 transition-colors">
                                 <!-- Flecha Simple -->
                                 <svg class="w-5 h-5 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
@@ -26,11 +26,11 @@
                     </div>
                     <div class="flow-root">
                         <div class="mt-8 overflow-x-auto">
-                            <div class="max-w-xl py-2 align-middle px-1">
-                                <form method="POST" action="{{ route('productos.store') }}"  role="form" enctype="multipart/form-data">
+                            <div class="max-w-xl py-2 align-middle">
+                                <form method="POST" action="{{ route('{{modelRoute}}.store') }}"  role="form" enctype="multipart/form-data">
                                     @csrf
 
-                                    @include('producto.form')
+                                    @include('{{modelView}}.form')
                                 </form>
                             </div>
                         </div>

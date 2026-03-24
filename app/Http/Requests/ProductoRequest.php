@@ -25,8 +25,7 @@ class ProductoRequest extends FormRequest
 			'producto' => 'required|string',
 			'descripcion' => 'string',
 			'activo' => 'required|boolean',
-			'id_users' => 'required',
-			'fecha_ins' => 'required',
+			'id_users' => 'required|integer'
         ];
     }
 }

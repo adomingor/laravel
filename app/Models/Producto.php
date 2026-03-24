@@ -21,20 +21,20 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Producto extends Model
 {
-    
-    // agregamos si queremos paginacion
-    protected $perPage = 5;
-
     // como la tabla tiene fecha_ins y fecha_upd hay que agregar
     const CREATED_AT = 'fecha_ins';
     const UPDATED_AT = 'fecha_upd';    
+    
+    // agregamos si queremos paginacion (ahora la está usando del modelo de la vista app\Models\ProductoCategoriaView.php)
+    // protected $perPage = 5;
 
     /**
      * The attributes that are mass assignable.
      *
      * @var array<int, string>
      */
-    protected $fillable = ['producto', 'descripcion', 'activo', 'id_users', 'fecha_ins', 'fecha_upd'];
+    // protected $fillable = ['producto', 'descripcion', 'activo', 'id_users', 'fecha_ins', 'fecha_upd'];
+    protected $fillable = ['producto', 'descripcion', 'activo', 'id_users'];
 
 
     /**
@@ -45,4 +45,9 @@ class Producto extends Model
         return $this->hasMany(\App\Models\ProdCat::class, 'id', 'id_productos');
     }
     
+    public function user() // Puedes llamarlo 'user' o 'usuario'
+    {
+        return $this->belongsTo(\App\Models\User::class, 'id_users', 'id'); // Ponemos el nombre de la columna de la vista, nombre de la columna de la tabla users
+    }    
+
 }

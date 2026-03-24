@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Producto;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use App\Http\Requests\ProductoRequest;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
+use App\Models\Producto;
 use App\Models\ProductoCategoriaView;
 
 class ProductoController extends Controller
@@ -15,15 +15,43 @@ class ProductoController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request): View
+    // public function index(Request $request): View
+    // {
+    //     // $productos = ProductoCategoriaView::all();
+    //     // return view('producto.index', compact('productos'));
+
+    //     $productos = ProductoCategoriaView::paginate();
+    //     // dd($productos->perPage()); // Esto te confirmará exactamente qué número está usando Laravel
+
+    //     return view('producto.index', compact('productos'))
+    //          ->with('i', ($request->input('page', 1) - 1) * $productos->perPage());
+    // }
+
+
+    public function index(Request $request)
     {
-        $productos = ProductoCategoriaView::all();
-        return view('producto.index', compact('productos'));
+        $search = $request->input('search');
+        $modelo = new ProductoCategoriaView;
 
-        // $productos = ProductoCategoriaView::paginate();
+        // 1. Paginado dinámico
+        $perPageInput = $request->input('per_page', $modelo->getPerPage());
+        $perPage = ($perPageInput === 'all') ? $modelo->count() ?: 1 : (int)$perPageInput;
 
-        // return view('producto.index', compact('productos'))
-        //      ->with('i', ($request->input('page', 1) - 1) * $productos->perPage());
+        // 2. Consulta con unaccent para ignorar tildes
+        // AGREGAMOS with('usuario') aquí
+        $productos = ProductoCategoriaView::with('usuario') 
+            ->when($search, function ($query, $search) {
+                $term = '%' . $search . '%';
+                return $query->whereRaw("unaccent(producto) ILIKE unaccent(?)", [$term])
+                            ->orWhereRaw("unaccent(descripcion) ILIKE unaccent(?)", [$term])
+                            ->orWhereRaw("unaccent(categorias) ILIKE unaccent(?)", [$term]);
+            })
+            ->orderBy('producto', 'desc')
+            ->paginate($perPage)
+            ->appends($request->all());
+
+        return view('producto.index', compact('productos', 'search'))
+            ->with('i', ($request->input('page', 1) - 1) * $productos->perPage());
     }
 
     /**
@@ -75,7 +103,7 @@ class ProductoController extends Controller
         $producto->update($request->validated());
 
         return Redirect::route('productos.index')
-            ->with('success', 'Producto updated successfully');
+            ->with('success', __('Grabado', ['_txt' => 'El Producto']));
     }
 
     public function destroy($id): RedirectResponse
