@@ -115,7 +115,7 @@ class ProductoController extends Controller
 
         return Redirect::route('productos.index')
             ->with('info', __('msjActualizado', ['_txt' => $producto->producto]))
-            ->with('toast_time', 6000);
+            ->with('toast_time', 3000);
     }
 
     // Borrado físico de los registros //

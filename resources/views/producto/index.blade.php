@@ -34,7 +34,7 @@
 
                                     <!-- Centro: Buscador -->
                                     <div class="flex-grow flex justify-center">
-                                        @include('components.vistas.busqueda-filtro-fx-index', [
+                                        @include('components.busquedas.filtro-fx-index', [
                                             'formClass' => 'w-full max-w-xl' 
                                         ])
                                     </div>
@@ -112,6 +112,5 @@
     </div>
 
     {{-- Es el @if(session('success') @endif --}}
-    {{-- @include('components.vistas.msjToast-session-success') --}}
-    @include('components.vistas.msjToastAlpine')
+    @include('components.mensajes.toastAlpine')
 </x-app-layout>

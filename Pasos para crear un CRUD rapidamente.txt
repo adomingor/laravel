@@ -363,7 +363,7 @@ Found 1 security vulnerability advisory affecting 1 package:
 Luego ejecuté 
 php artisan lang:add es
 
-Editar el archivo .event y dejar así
+Editar el archivo .env y dejar así
 APP_LOCALE=es
 APP_FALLBACK_LOCALE=en
 APP_FAKER_LOCALE=en_AR
