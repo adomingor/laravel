@@ -482,3 +482,7 @@ Se los puede llamar con x-layouts o con include
     Voy a instalarlo para los mensajes de cofirmación, veré los toast tambien
     
 npm install sweetalert2
+
+en el app.js agregar 
+import Swal from 'sweetalert2';
+window.Swal = Swal;
