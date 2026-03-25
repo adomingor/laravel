@@ -20,7 +20,7 @@
         @if(session('error')) message = '{{ session('error') }}'; type = 'error'; @endif
         @if(session('status')) message = '{{ session('status') }}'; type = 'info'; @endif
         @if(session('info')) message = '{{ session('info') }}'; type = 'info'; @endif
-        @if(session('eliminated')) message = '{{ session('eliminated') }}'; type = 'deleted'; @endif
+        @if(session('erased')) message = '{{ session('erased') }}'; type = 'deleted'; @endif
         @if(session('inactive')) message = '{{ session('inactive') }}'; type = 'inactive'; @endif
         @if(session('warning')) message = '{{ session('warning') }}'; type = 'warning'; @endif
         
@@ -65,6 +65,18 @@
 
 <style>
     .animate-progress-bar { animation: progress-drain var(--toast-duration) linear forwards; }
+
+
+    .animate-custom-bounce { animation: custom-bounce 0.7s ease-in-out 4; } /* 0.7s  =  duracion de la animacion y 4 = cantidad de repeticiones*/
+    .animate-custom-shake { animation: custom-shake 0.2s ease-in-out 5; } 
+    .animate-custom-pulse { animation: custom-pulse 1s ease-in-out 2; }
+    .animate-custom-rotate { animation: custom-rotate 0.8s ease-in-out 2; }
+    .animate-custom-pop { animation: custom-pop 0.4s ease-out 1; }
+    .animate-custom-wiggle { animation: custom-wiggle 0.4s ease-in-out 3; }
+    .animate-custom-slide-up { animation: custom-slide-up 0.4s ease-out 1; }
+    .animate-custom-heartbeat { animation: custom-heartbeat 0.8s ease-in-out 2; }
+    .animate-custom-flip { animation: custom-flip 0.6s ease-in-out 1; }
+    .animate-custom-glow { animation: custom-glow 1s ease-in-out 2; }
 
     /* Combos de animación */
     .animate-success-combo { animation: custom-bounce 0.6s ease-in-out 2, custom-flip 1s ease-in-out 2; }

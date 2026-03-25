@@ -15,6 +15,10 @@ select2(); // Inicializa el plugin en jQuery
 import 'select2/dist/css/select2.min.css';
 // PARA USAR CON SELECT2
 
+
+import Swal from 'sweetalert2';
+window.Swal = Swal;
+
 window.Alpine = Alpine;
 
 Alpine.start();

@@ -475,3 +475,10 @@ Se los puede llamar con x-layouts o con include
 
     Si se usa con include
     @include('botones.back-list', ['route' => route('productos.index'), 'label' => 'BackToList'])
+
+
+
+------------------ SWEETALERT2
+    Voy a instalarlo para los mensajes de cofirmación, veré los toast tambien
+    
+npm install sweetalert2

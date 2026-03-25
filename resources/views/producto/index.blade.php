@@ -5,11 +5,6 @@
         </h2>
     </x-slot>
 
-
-<a href="{{ route('productos.papelera') }}" class="text-sm text-gray-600 hover:underline">
-    Ver papelera
-</a>
-
     <div class="py-12">
         <div class="max-w-full mx-auto sm:px-6 lg:px-8 space-y-6">
             <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
@@ -85,7 +80,7 @@
                                                     <a href="{{ route('productos.edit', $producto->id) }}" class="text-indigo-600 font-bold hover:text-indigo-900  mr-2">{{ __('Edit') }}</a>
                                                     @csrf
                                                     @method('DELETE')
-                                                    <a href="{{ route('productos.destroy', $producto->id) }}" class="text-red-600 font-bold hover:text-red-900" onclick="event.preventDefault(); confirm('Confirme la eliminación') ? this.closest('form').submit() : false;">{{ __('Deactivate') }}</a>
+                                                    <a href="{{ route('productos.destroy', $producto->id) }}" class="text-red-600 font-bold hover:text-red-900" onclick="event.preventDefault(); confirm('Confirme la acción') ? this.closest('form').submit() : false;">{{ __('Deactivate') }}</a>
                                                 </form>
                                             </td>
                                         </tr>
@@ -109,8 +104,12 @@
                 </div>
             </div>
         </div>
+            <div class="fixed bottom-4 right-4">
+                <a href="{{ route('productos.papelera') }}" class="text-2xl opacity-70 hover:opacity-100 transition-opacity duration-200 px-4" title="Ir a la papelera">
+                    🗑️
+                </a>
+            </div>
     </div>
-
     {{-- Es el @if(session('success') @endif --}}
     @include('components.mensajes.toastAlpine')
 </x-app-layout>

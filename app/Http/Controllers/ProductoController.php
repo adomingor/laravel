@@ -195,7 +195,7 @@ class ProductoController extends Controller
         $producto->delete();
 
         return back()
-            ->with('warning', __('msjBorrado', ['_txt' => $producto->producto]))
+            ->with('erased', __('msjBorrado', ['_txt' => $producto->producto]))
             ->with('toast_time', 2000);
     }
 
