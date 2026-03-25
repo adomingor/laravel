@@ -9,7 +9,7 @@
             error: { border: 'border-red-600', barColor: 'bg-red-600', iconColor: 'text-red-600', icon: 'M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z', anim: 'animate-error-combo' },
             info: { border: 'border-blue-500', barColor: 'bg-blue-500', iconColor: 'text-blue-600', icon: 'M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12v-.008z', anim: 'animate-info-combo' },
             deleted: { border: 'border-orange-700', barColor: 'bg-orange-700', iconColor: 'text-orange-700', icon: 'M6 7.5h12M9.75 7.5v9m4.5-9v9M4.5 7.5h15m-13.5 0l.75 12a2.25 2.25 0 002.244 2.1h6.012a2.25 2.25 0 002.244-2.1l.75-12M9 7.5V5.25A1.5 1.5 0 0110.5 3.75h3A1.5 1.5 0 0115 5.25V7.5', anim: 'animate-deleted-combo' },
-            inactive: { border: 'border-slate-400', barColor: 'bg-slate-400', iconColor: 'text-slate-500', icon: 'M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636', anim: 'animate-inactive-combo' }            
+            inactive: { border: 'border-slate-400', barColor: 'bg-slate-400', iconColor: 'text-slate-500', icon: 'M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636', anim: 'animate-inactive-combo' }
         };
             return types[this.type] || types.info;
         }

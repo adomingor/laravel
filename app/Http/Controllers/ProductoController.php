@@ -35,7 +35,7 @@ class ProductoController extends Controller
                     ->orWhereRaw("unaccent(categorias) ILIKE unaccent(?)", [$term]);
                 });
             })
-            ->orderBy('producto', 'desc')
+            ->orderBy('producto', 'asc')
             ->paginate($perPage)
             ->appends($request->all());
 
@@ -79,7 +79,7 @@ class ProductoController extends Controller
         }
 
         return Redirect::route('productos.index')
-            ->with('success', __('DadoAlta', ['_txt' => $producto->producto]));
+            ->with('success', __('msjDadoAlta', ['_txt' => $producto->producto]));
     }
 
     /**
@@ -114,7 +114,7 @@ class ProductoController extends Controller
         $producto->update($request->validated());
 
         return Redirect::route('productos.index')
-            ->with('info', __('Actualizado', ['_txt' => $producto->producto]))
+            ->with('info', __('msjActualizado', ['_txt' => $producto->producto]))
             ->with('toast_time', 6000);
     }
 
@@ -145,8 +145,8 @@ class ProductoController extends Controller
         $producto->update(['activo' => false]);
 
         return redirect()->back()
-            ->with('inactive', __('Desactivado', ['_txt' => $producto->producto]))
-            ->with('toast_time', 4000);
+            ->with('inactive', __('msjDesactivado', ['_txt' => $producto->producto]))
+            ->with('toast_time', 2000);
     }
 
     /**
@@ -157,6 +157,46 @@ class ProductoController extends Controller
         return $this->belongsToMany(Categoria::class, 'prod_cat', 'id_productos', 'id_categorias')
                     ->withPivot('activo', 'id_users') // Campos extra de tu tabla intermedia
                     ->withTimestamps('fecha_ins', 'fecha_upd');
+    }
+
+
+    public function papelera()
+    {
+        $productos = Producto::inactivo()->get();
+        return view('producto.papelera', compact('productos'));
+    }
+
+    public function restore($id)
+    {
+        Producto::where('id', $id)
+            ->where('activo', false)
+            ->update(['activo' => true]);
+
+        return back()
+            ->with('success', 'Producto restaurado correctamente')
+            ->with('toast_time', 2000);
+    }
+
+
+    public function forceDelete($id)
+    {
+        $producto = Producto::findOrFail($id);
+
+        // 🚫 No permitir eliminar si está activo
+        if ($producto->activo) {
+            return back()
+                ->with('info', 'Primero debes enviar el producto a la papelera')
+                ->with('toast_time', 3000);
+        }
+
+        // Relaciones
+        $producto->categorias()->detach();
+
+        $producto->delete();
+
+        return back()
+            ->with('warning', __('msjBorrado', ['_txt' => $producto->producto]))
+            ->with('toast_time', 2000);
     }
 
 }

@@ -459,4 +459,19 @@ Dió 3 opciones para mostrar las categorias:
             }
         </style>
 
-AL FINAL UN DOLOR DE HUEVOS EL SELECT2, lo deje con los checkbox
+AL FINAL UN DOLOR DE HUEVOS (o no? despues volver a activarlo) EL SELECT2, lo deje con los checkbox 
+
+Agregamos papelera de reciclaje para volver atras los productos dados de baja (activo = false)
+
+------------------------ COMPONENTES
+Se los puede llamar con x-layouts o con include
+
+    Si se usa con x-layouts
+    -- pasandole parametros por ejemplo
+                <x-botones.back-list 
+                    :route="route('productos.index')" 
+                    label="BackToList" 
+                />
+
+    Si se usa con include
+    @include('botones.back-list', ['route' => route('productos.index'), 'label' => 'BackToList'])

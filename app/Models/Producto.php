@@ -69,4 +69,17 @@ class Producto extends Model
         ->withPivot('activo', 'id_users')
         ->withTimestamps('fecha_ins', 'fecha_upd');
     }
+
+
+    public function scopeActivo($query)
+    {
+        return $query->where('activo', true);
+    }
+
+    public function scopeInactivo($query)
+    {
+        return $query->where('activo', false);
+    }
+
+
 }

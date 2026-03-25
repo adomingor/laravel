@@ -264,11 +264,15 @@
     "Detail": "Detalle",
     "Add new": "Agregar",
     "Back": "Regresar",
-    "DadoAlta": ":_txt se dió de alta!",
-    "Grabado": ":_txt se guardó!",
-    "Borrado": ":_txt se borró!",
-    "Desactivado": ":_txt fué desactivado!",
-    "Actualizado": ":_txt se actualizó!",
+    "Papelera": "Enviar a la papelera",
+    "msjDadoAlta": ":_txt se dió de alta!",
+    "msjGrabado": ":_txt se guardó!",
+    "msjBorrado": ":_txt se borró definitivamente!",
+    "msjDesactivado": ":_txt fue desactivado!",
+    "msjPapelera":  ":_txt fue enviado a la papelera",
+    "msjRestaurado":  ":_txt fue restaurado",
+    "msjActualizado": ":_txt se actualizó!",
     "Editing": "Editando los datos",
-    "Deactivate": "Deasctivar"
+    "Deactivate": "Deasctivar",
+    "BackToList": "Volver al listado"
 }

@@ -4,6 +4,12 @@
             {{ __('Productos') }}
         </h2>
     </x-slot>
+
+
+<a href="{{ route('productos.papelera') }}" class="text-sm text-gray-600 hover:underline">
+    Ver papelera
+</a>
+
     <div class="py-12">
         <div class="max-w-full mx-auto sm:px-6 lg:px-8 space-y-6">
             <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg">

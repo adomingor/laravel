@@ -20,8 +20,12 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     Route::resource('inventory-items', InventoryItemController::class);
-    Route::resource('productos', ProductoController::class);
 
+    Route::get('/productos/papelera', [ProductoController::class, 'papelera'])->name('productos.papelera');
+    Route::put('/productos/{id}/restore', [ProductoController::class, 'restore'])->name('productos.restore');
+    Route::delete('/productos/{id}/force', [ProductoController::class, 'forceDelete'])->name('productos.forceDelete');
+
+    Route::resource('productos', ProductoController::class);
 
 });
 
