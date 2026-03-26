@@ -1,0 +1,91 @@
+NO SE PUDIÓ
+
+
+Pasos para actualizar Laravel (12 a 13)
+
+1. Requisitos previos y entorno
+Actualiza PHP: Asegúrate de que tu servidor y entorno de desarrollo (como Laravel Herd o Docker) ejecuten al menos PHP 8.3.
+Copia de seguridad: Realiza un backup de tu base de datos y archivos antes de comenzar.
+Pruebas: Ejecuta tus tests existentes con php artisan test
+Hacemos un test para ver q todo este bien
+
+PS C:\laragon\www\primerProyecto> php artisan test
+
+   PASS  Tests\Unit\ExampleTest
+  ✓ that true is true                                                                                                                                                                                 0.53s  
+
+   PASS  Tests\Feature\Auth\AuthenticationTest
+  ✓ login screen can be rendered                                                                                                                                                                      4.56s  
+  ✓ users can authenticate using the login screen                                                                                                                                                     1.90s  
+  ✓ users can not authenticate with invalid password                                                                                                                                                  0.39s  
+  ✓ users can logout                                                                                                                                                                                  0.05s  
+
+   PASS  Tests\Feature\Auth\EmailVerificationTest
+  ✓ email verification screen can be rendered                                                                                                                                                         0.31s  
+  ✓ email can be verified                                                                                                                                                                             0.25s  
+  ✓ email is not verified with invalid hash                                                                                                                                                           0.20s  
+
+   PASS  Tests\Feature\Auth\PasswordConfirmationTest
+  ✓ confirm password screen can be rendered                                                                                                                                                           0.62s  
+  ✓ password can be confirmed                                                                                                                                                                         0.04s  
+  ✓ password is not confirmed with invalid password                                                                                                                                                   0.24s  
+
+   PASS  Tests\Feature\Auth\PasswordResetTest
+  ✓ reset password link screen can be rendered                                                                                                                                                        0.73s  
+  ✓ reset password link can be requested                                                                                                                                                              1.59s  
+  ✓ reset password screen can be rendered                                                                                                                                                             1.48s  
+  ✓ password can be reset with valid token                                                                                                                                                            0.50s  
+
+   PASS  Tests\Feature\Auth\PasswordUpdateTest
+  ✓ password can be updated                                                                                                                                                                           0.04s  
+  ✓ correct password must be provided to update password                                                                                                                                              0.08s  
+
+   PASS  Tests\Feature\Auth\RegistrationTest
+  ✓ registration screen can be rendered                                                                                                                                                               1.57s  
+  ✓ new users can register                                                                                                                                                                            0.09s  
+
+   PASS  Tests\Feature\ExampleTest
+  ✓ the application returns a successful response                                                                                                                                                     0.14s  
+
+   PASS  Tests\Feature\ProfileTest
+  ✓ profile page is displayed                                                                                                                                                                         3.12s  
+  ✓ profile information can be updated                                                                                                                                                                0.16s  
+  ✓ email verification status is unchanged when the email address is unchanged                                                                                                                        0.14s  
+  ✓ user can delete their account                                                                                                                                                                     0.03s  
+  ✓ correct password must be provided to delete account                                                                                                                                               0.03s  
+
+  Tests:    25 passed (61 assertions)
+  Duration: 23.97s
+
+ya hicimos un commit a gitHub para asegurarnos poder volver atras
+
+2. Actualización manual (paso a paso)
+Debes modificar el archivo composer.json en la raíz de tu proyecto: 
+Actualiza el Framework: Cambia la versión de laravel/framework a ^13.0.
+Actualiza dependencias principales:
+phpunit/phpunit a ^12.0 (o la versión compatible más reciente).
+pestphp/pest a ^4.0 (si utilizas Pest).
+Ejecuta Composer: Limpia la caché y actualiza los paquetes:
+bash
+composer update
+
+NO SE ACTUALIZÓ A LA VESION 13
+Veamos otra pagina donde tira un par de comandos
+https://www.cursosdesarrolloweb.es/blog/actualizar-laravel-12-a-laravel-13
+
+Paso 1: comprobar conflictos antes de actualizar
+Antes de tocar nada, ejecuta este comando para saber si alguna dependencia va a bloquear el upgrade:
+
+composer why-not laravel/framework "^13.0"
+Si no devuelve nada, puedes continuar sin problemas. Si devuelve resultados, te lista exactamente qué paquetes están fijando una versión incompatible — normalmente paquetes de terceros que aún no tienen soporte para Laravel 13. Resuélvelos antes de continuar.
+
+Paso 2: actualizar dependencias
+composer require laravel/framework:^13.0 --no-update
+composer require phpunit/phpunit:^12.0 --dev --no-update
+composer require pestphp/pest:^4.0 --dev --no-update
+composer update
+Si usas el instalador global de Laravel:
+
+composer global update laravel/installer
+
+NO ESTÁ DISPONIBLE TODAVIA (APARENTEMENTE)
